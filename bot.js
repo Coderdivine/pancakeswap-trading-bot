@@ -332,18 +332,19 @@ async function getPrice(coin, fiated) {
 async function update(amounts){
      last_point = last_price.binancecoin.usd;
      
-    await botss.findByIdAndUpdate(id, 
-      {last:amounts.toString()},{last_point},
-       function (err, result) {
-            if (err) {
-                console.log(err.message)
-            } else {
-                console.log(result);
-                console.log("A trade was made: updated");
-                console.log("swaped")
-            }
-        })
-        console.log('updated')
+     try{
+      const done = await botss.findByIdAndUpdate(id, 
+        {last:amounts.toString()},{last_point});
+        
+         if(done){
+                  console.log(done);
+                  console.log("A trade was made: updated");
+                  console.log("swaped")
+          }
+          console.log('updated')
+     }catch(err){
+      console.log(err.message);
+     }
 }
 
 console.log('[INFO] RUNNING. Press ctrl+C to exit.')
