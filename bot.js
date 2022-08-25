@@ -373,8 +373,15 @@ async function check(){
       await makeSwap(balance,toBuyValue,toSellValue)
       
   }else{
-      console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
+      
+      let less = Number(last_price.binancecoin.usd)-Number(last_point)
+      less = less + Number(_string);
+      if(less <= 0){
+        
+      }else{
+        console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
       await waitToTrade(config.tradeInterval);
+      }
   }
 }
 //await check();
