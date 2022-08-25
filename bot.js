@@ -361,10 +361,10 @@ async function check(){
       let amounts_two = Number(last_point) * Number(balance);
     console.log('am_one,am_two',{amounts_one,amounts_two})
       let amounts = amounts_one-amounts_two;
-      toSellValue = Number(amounts)/last_price.binancecoin.usd;
-      toSellValue = toSellValue.toFixed(6)
-      toSellValue = toSellValue.toString();
-      toBuyValue = 0;
+      toBuyValue = Number(amounts)/last_price.binancecoin.usd;
+      toBuyValue = toBuyValue.toFixed(6)
+      toBuyValue = toBuyValue.toString();
+      toSellValue = 0;
       console.log('amounts',amounts);
       console.log("@",{toSellValue,toBuyValue})
       console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
