@@ -341,12 +341,10 @@ async function getPrice(coin, fiated) {
 
 }
 
-async function update(amounts){
-     last_point = last_price.binancecoin.usd;
-     
+async function update(amounts){ 
      try{
       const done = await botss.findByIdAndUpdate(id, 
-        {last:amounts.toString()},{last_point});
+        {last:amounts.toString()},{last_point:last_price.binancecoin.usd.toString()});
         
          if(done){
                   console.log(done);
