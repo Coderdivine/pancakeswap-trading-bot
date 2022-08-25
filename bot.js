@@ -328,7 +328,7 @@ async function getPrice(coin, fiated) {
 }
 
 async function update(amounts){
-    let last_point = last_price.binancecoin.usd;
+     last_point = last_price.binancecoin.usd;
     await botss.updateOne({ last },
         {
             $set: {
@@ -362,7 +362,7 @@ async function check(){
     console.log('am_one,am_two',{amounts_one,amounts_two})
       let amounts = amounts_one-amounts_two;
       toBuyValue = Number(amounts)/last_price.binancecoin.usd;
-      toBuyValue = toBuyValue.toFixed(6)
+      toBuyValue = toBuyValue.toFixed(6);
       toBuyValue = toBuyValue.toString();
       toSellValue = 0;
       console.log('amounts',amounts);
