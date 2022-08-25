@@ -332,7 +332,7 @@ async function update(amounts){
     await botss.updateOne({ last },
         {
             $set: {
-                last: amounts,
+                last: amounts.toString(),
                 last_point
             }
         }, function (err, result) {
