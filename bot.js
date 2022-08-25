@@ -398,11 +398,15 @@ async function check(){
         toSellValue = toSellValue.toFixed(6);
         toSellValue = toSellValue.toString();
         toBuyValue = 0;
+       if(amounts > 0){
         console.log('amounts',amounts);
         console.log("@",{toSellValue,toBuyValue})
         console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
         console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
       await makeSwap(call,toBuyValue,toSellValue)
+       }else{
+        console.log('skipped',toSellValue)
+       }
       }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
       await waitToTrade(config.tradeInterval);
