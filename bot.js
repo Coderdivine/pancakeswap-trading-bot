@@ -332,7 +332,7 @@ async function update(amounts){
     await botss.updateOne({ last },
         {
             $set: {
-                last: amounts.toString(),
+                last:amounts.toString(),
                 last_point
             }
         }, function (err, result) {
@@ -344,6 +344,7 @@ async function update(amounts){
                 console.log("swaped")
             }
         })
+        console.log('updated')
 }
 
 console.log('[INFO] RUNNING. Press ctrl+C to exit.')
