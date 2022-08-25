@@ -111,6 +111,18 @@ async function checkBalance() {
   console.log(chalk.magenta(`[INFO] wallet balance: ${saHuman} ${saSymbol}`))
   return bnbHuman
 }
+async function checkBalanceTwo() {
+  let bnbBalance = await account.getBalance()
+  let bnbHuman = ethers.utils.formatEther(bnbBalance)
+  let balance = await tokenContract.balanceOf(wallet.address)
+  let humanBalance = ethers.utils.formatEther(balance)
+  let saBalance = await sa.balanceOf(wallet.address)
+  let saHuman = ethers.utils.formatEther(saBalance)
+  console.log(chalk.magenta(`[INFO] wallet balance: ${bnbHuman} BNB`))
+  console.log(chalk.magenta(`[INFO] wallet balance: ${humanBalance} ${tokenSymbol}`))
+  console.log(chalk.magenta(`[INFO] wallet balance: ${saHuman} ${saSymbol}`))
+  return saHuman
+}
 
 async function buyAction(buyQuantity) {
   console.log(chalk.yellow('[INFO] ready to buy'))
@@ -378,6 +390,7 @@ async function check(){
       less = less + Number(_string);
       if(less <= 0){
         console.log('block changed');
+
       }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
       await waitToTrade(config.tradeInterval);
