@@ -391,7 +391,11 @@ async function check(){
       less = less + Number(_string);
       if(less <= 0){
         console.log('block changed');
-
+        let call= Number(last_price.tether.usd) * Number(balance_two);
+        let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
+        let amounts_two = Number(last_point) * Number(balance);
+        console.log('am_one,am_two',{amounts_one,amounts_two})
+        let amounts = amounts_two-amounts_one;
       }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
       await waitToTrade(config.tradeInterval);
