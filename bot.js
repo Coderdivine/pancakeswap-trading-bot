@@ -394,7 +394,7 @@ async function check(){
         let amounts_two = Number(last_point) * Number(balance);
         console.log('am_one,am_two',{amounts_one,amounts_two})
         let amounts = amounts_two-amounts_one;
-        toBuyValue = Number(amounts)/last_price.tether.usd;
+        toSellValue = Number(amounts)///last_price.tether.usd;
         toSellValue = toSellValue.toFixed(6);
         toSellValue = toSellValue.toString();
         toBuyValue = 0;
