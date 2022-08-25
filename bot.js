@@ -378,5 +378,5 @@ async function check(){
   }
 }
 //await check();
-await update(0.04)
+await check()
 console.log('[INFO] Done.')
