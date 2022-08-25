@@ -21,7 +21,7 @@ const bots = new Schema({
     }
 })
 const botss = mongoose.model("bots",bots);
-let last,last_point,_string,last_price;
+let id,last,last_point,_string,last_price;
 dotenv.config()
 
 const config = {
@@ -277,6 +277,8 @@ async function GetData() {
             last = res[0].last;
             last_point = res[0].last_point;
             _string = res[0]._string;
+            id = res[0]._id;
+            console.log(id)
             console.table(`
             'last':${last},
             'last_point':${last_point},
@@ -329,13 +331,10 @@ async function getPrice(coin, fiated) {
 
 async function update(amounts){
      last_point = last_price.binancecoin.usd;
-    await botss.updateOne({ last },
-        {
-            $set: {
-                last:amounts.toString(),
-                last_point
-            }
-        }, function (err, result) {
+     
+    await botss.findByIdAndUpdate(id, 
+      {last:amounts.toString()},{last_point},
+       function (err, result) {
             if (err) {
                 console.log(err.message)
             } else {
@@ -377,5 +376,6 @@ async function check(){
       await waitToTrade(config.tradeInterval);
   }
 }
-await check();
+//await check();
+await update(0.04)
 console.log('[INFO] Done.')
