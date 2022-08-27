@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bots = new Schema({
-    amountOut:String,
-    _string:String,
+   _string:String,
     last:String,
     last_point:String,
     rate:String,
