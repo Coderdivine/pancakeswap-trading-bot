@@ -425,7 +425,7 @@ async function check(){
             console.log('skipped',toSellValue)
            }
         }else{
-          console.log(chalk.cyan(``))
+          console.log(chalk.cyan(`IN SWAP not enabled`));
         }
       }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
