@@ -312,9 +312,9 @@ async function GetData() {
             }else{
                 console.log("Something dey sup");
                 const bot = new botss({
-                    last:'277',
+                    last:'0.0021',
                     _string:"5.2",
-                    last_point:last_price.binancecoin.usd,
+                    last_point:'277',
                     period:Date.now(),
                     count:"0",
                     in_swap:false
