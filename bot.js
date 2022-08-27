@@ -387,7 +387,7 @@ async function check(){
   if((Number(last_price.binancecoin.usd)-Number(last_point)) >= Number(_string)){
       let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
       let amounts_two = Number(last_point) * Number(balance);
-      console.log('am_one,am_two',{amounts_one,amounts_two})
+      console.log('amountChange',{amounts_one,amounts_two})
       let amounts = amounts_one-amounts_two;
       toBuyValue = Number(amounts)/last_price.binancecoin.usd;
       if(toBuyValue >= 0.105){// in bnb :)
