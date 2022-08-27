@@ -21,7 +21,7 @@ const bots = new Schema({
     }
 })
 const botss = mongoose.model("bots",bots);
-let id,last,last_point,_string,last_price,count;
+let id,last,last_point,_string,last_price,count,period,in_swap;
 dotenv.config()
 
 const config = {
@@ -425,7 +425,7 @@ async function check(){
             console.log('skipped',toSellValue)
            }
         }else{
-          console.log()
+          console.log(chalk.cyan(``))
         }
       }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
