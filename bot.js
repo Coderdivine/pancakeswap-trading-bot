@@ -313,7 +313,7 @@ async function GetData() {
                 console.log("Something dey sup");
                 const bot = new botss({
                     last:last_price.binancecoin.usd,
-                    _string:"10",
+                    _string:"5.2",
                     last_point:last_price.binancecoin.usd,
                     period:Date.now(),
                     count:"0",
@@ -433,7 +433,7 @@ async function check(){
         }else{
           console.log(chalk.cyan(`IN SWAP not enabled`));
           
-          update(toSellValue,rate,period);
+          update(toSellValue,amounts,period);
         }
        if(amounts > 0.14990){
         console.log('amounts',amounts);23
