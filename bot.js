@@ -390,6 +390,7 @@ async function check(){
       
   }else{
       
+    
       let less = Number(last_price.binancecoin.usd)-Number(last_point)
       less = less + Number(_string);
       if(less <= 0){
