@@ -408,7 +408,7 @@ async function check(){
         console.log("@",{toSellValue,toBuyValue})
         console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
         console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
-      await makeSwap(call,toBuyValue,toSellValue)
+        await makeSwap(call,toBuyValue,toSellValue)
        }else{
         console.log('skipped',toSellValue)
        }
