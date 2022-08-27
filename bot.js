@@ -392,7 +392,7 @@ async function check(){
       
       let less = Number(last_price.binancecoin.usd)-Number(last_point)
       less = less + Number(_string);
-      if(less){
+      if(less <= 0){
         console.log('block changed');
         let call= Number(last_price.tether.usd) * Number(balance_two);
         let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
