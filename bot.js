@@ -422,6 +422,8 @@ async function check(){
            }else{
             console.log('skipped',toSellValue)
            }
+        }else{
+          console.log()
         }
       }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
