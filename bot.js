@@ -367,7 +367,6 @@ console.log('[INFO] RUNNING. Press ctrl+C to exit.')
 let toBuyValue = config.startAmount
 let toSellValue = 0
 console.log('startAmount',config.startAmount);
-console.log(0.00001)
 let balance = await checkBalance()
 let balance_two = await checkBalanceTwo()
 console.log('bal',balance)
