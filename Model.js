@@ -11,7 +11,7 @@ const bots = new Schema({
     count:String,
     in_swap:{
         type:Boolean,
-    }
+    },
     date:{
         type:Date,
         default:Date.now()
