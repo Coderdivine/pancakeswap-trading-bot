@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 const bots = new Schema({
     amountOut:String,
     _string:String,
-    old_price:String,
-    new_price:String,
+    last:String,
+    last_point:String,
     rate:String,
     period:{
         type:Date

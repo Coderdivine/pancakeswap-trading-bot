@@ -348,7 +348,7 @@ async function update(amounts){
         {
             $set: {
                 last: amounts.toString(),
-                last_point:last_price.binancecoin.usd.toString()
+                last_point:last_price.binancecoin.usd.toString(),
             }
         });
         
@@ -390,7 +390,7 @@ async function check(){
       
   }else{
       
-    
+
       let less = Number(last_price.binancecoin.usd)-Number(last_point)
       less = less + Number(_string);
       if(less <= 0){
