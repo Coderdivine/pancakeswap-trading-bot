@@ -315,6 +315,7 @@ async function GetData() {
                     last:'0.0021',
                     _string:"5.2",
                     last_point:'277',
+                    rate:'1',
                     period:Date.now(),
                     count:"0",
                     in_swap:false
