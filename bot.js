@@ -290,6 +290,9 @@ async function GetData() {
             last_point = res[0].last_point;
             _string = res[0]._string;
             id = res[0]._id;
+            period = res[0].period;
+            count = res[0].count;
+            
             console.log(id)
             console.table(`
             'last':${last},
