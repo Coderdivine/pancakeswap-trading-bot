@@ -21,7 +21,7 @@ const bots = new Schema({
     }
 })
 const botss = mongoose.model("bots",bots);
-let id,last,last_point,_string,last_price;
+let id,last,last_point,_string,last_price,count;
 dotenv.config()
 
 const config = {
