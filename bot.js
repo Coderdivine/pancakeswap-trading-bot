@@ -373,7 +373,7 @@ async function update(amounts,rate,period){
       console.log(err.message);
      }
 }
-
+//
 console.log('[INFO] RUNNING. Press ctrl+C to exit.')
 let toBuyValue = config.startAmount;
 let toSellValue = 0;
