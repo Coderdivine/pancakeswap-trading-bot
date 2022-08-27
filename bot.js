@@ -341,15 +341,18 @@ async function getPrice(coin, fiated) {
 
 }
 
-async function update(amounts){ 
+async function update(amounts,rate,period){ 
      try{
       
       const done = await botss.updateOne({ last },
         {
             $set: {
-                last: amounts.toString(),
+                last:amounts.toString(),
                 last_point:last_price.binancecoin.usd.toString(),
-            }
+                rate,
+                period,
+                count:Number(count)+1,
+            } 
         });
         
          if(done){
