@@ -420,7 +420,6 @@ async function check(){
         toSellValue = toSellValue.toFixed(6);
         toSellValue = toSellValue.toString();
         toBuyValue = 0;
-<<<<<<< HEAD
         if(in_swap){
           if(amounts > 0.004990){
             console.log('amounts',amounts);
@@ -436,7 +435,6 @@ async function check(){
           
           update(toSellValue,rate,period);
         }
-=======
        if(amounts > 0.14990){
         console.log('amounts',amounts);23
         console.log("@",{toSellValue,toBuyValue})
@@ -446,8 +444,7 @@ async function check(){
        }else{
         console.log('skipped',toSellValue)
        }
->>>>>>> a7ad28d320f9d863b1fda0edf69c8eff44ce56fb
-      }else{
+          }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
        await waitToTrade(config.tradeInterval);
       }
