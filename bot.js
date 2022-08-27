@@ -427,7 +427,8 @@ async function check(){
            }
         }else{
           console.log(chalk.cyan(`IN SWAP not enabled`));
-          update(amount,rate,period);
+          period = Date.now() - time;
+          update(toSellValue,rate,period);
         }
       }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
