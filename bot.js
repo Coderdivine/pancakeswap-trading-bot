@@ -299,7 +299,7 @@ async function GetData() {
             console.table(console_data);
             return {
                 bool: true,
-                data: res[0],
+                data:console_data,
                 msg: "Data found"
             }
         } else {
