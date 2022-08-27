@@ -2,7 +2,7 @@ import  ethers from 'ethers'
 import  chalk from 'chalk'
 import  dotenv from 'dotenv'
 import  ora from'ora'
-import Coingecko from 'coingecko-api'
+import Coingecko from 'coingecko-api';
 import mongoose from 'mongoose'
 const CoinGeckoClient = new Coingecko();
 //"mongodb+srv://chimdi:chimdindu2@cluster0.5zspaed.mongodb.net/?retryWrites=true&w=majority" || 'mongodb://localhost:27017/mum'
