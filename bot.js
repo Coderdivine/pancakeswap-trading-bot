@@ -404,8 +404,8 @@ async function check(){
         toSellValue = toSellValue.toFixed(6);
         toSellValue = toSellValue.toString();
         toBuyValue = 0;
-       if(amounts > 0.004990){
-        console.log('amounts',amounts);
+       if(amounts > 0.14990){
+        console.log('amounts',amounts);23
         console.log("@",{toSellValue,toBuyValue})
         console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
         console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
