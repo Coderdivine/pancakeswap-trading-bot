@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bots = new Schema({
-    last:String,
+    amountOut:String,
     _string:String,
-    last_point:String,
+    old_price:String,
+    new_price:String,
+    rate:String,
+    period:{
+        type:Date
+    },
+    count:String,
     date:{
         type:Date,
         default:Date.now()
