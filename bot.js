@@ -364,8 +364,8 @@ async function update(amounts){
 }
 
 console.log('[INFO] RUNNING. Press ctrl+C to exit.')
-let toBuyValue = config.startAmount
-let toSellValue = 0
+let toBuyValue = config.startAmount;
+let toSellValue = 0;
 console.log('startAmount',config.startAmount);
 let balance = await checkBalance()
 let balance_two = await checkBalanceTwo()
