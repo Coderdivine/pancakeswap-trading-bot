@@ -292,6 +292,7 @@ async function GetData() {
             id = res[0]._id;
             period = res[0].period;
             count = res[0].count;
+            in_swap = res[0].in_swap;
             let console_data = {
               last,last_point,_string,
               id,period,count
@@ -314,7 +315,8 @@ async function GetData() {
                     _string:"10",
                     last_point:last_price.binancecoin.usd,
                     period:Date.now(),
-                    count:"0"
+                    count:"0",
+                    in_swap:false
 
                 })
                const save =  await bot.save();
