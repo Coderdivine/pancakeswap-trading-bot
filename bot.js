@@ -292,12 +292,11 @@ async function GetData() {
             id = res[0]._id;
             period = res[0].period;
             count = res[0].count;
-            
-            console.log(id)
-            console.table(`
-            'last':${last},
-            'last_point':${last_point},
-            'STRING':${_string}`);
+            let console_data = {
+              last,last_point,_string,
+              id,period,count
+            }
+            console.table(console_data);
             return {
                 bool: true,
                 data: res[0],
