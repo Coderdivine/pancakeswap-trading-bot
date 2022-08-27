@@ -293,9 +293,10 @@ async function GetData() {
             period = res[0].period;
             count = res[0].count;
             in_swap = res[0].in_swap;
+            time = res[0].date
             let console_data = {
               last,last_point,_string,
-              id,period,count
+              id,period,count,time
             }
             console.table(console_data);
             return {
