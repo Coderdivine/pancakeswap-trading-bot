@@ -313,6 +313,9 @@ async function GetData() {
                     last:last_price.binancecoin.usd,
                     _string:"10",
                     last_point:last_price.binancecoin.usd,
+                    period:Date.now(),
+                    count:"0",
+
                 })
                const save =  await bot.save();
                if(save){
