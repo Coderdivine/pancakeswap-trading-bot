@@ -263,7 +263,7 @@ async function waitToTrade(seconds) {
   return
 }
 
-async function makeSwap(balance,toBuyValue,toSellValue) {
+async function makeSwap(balance,toBuyValue,toSellValue,rate,period) {
   if (balance > config.walletMin) {
     console.log('toBuyValue =', toBuyValue)
     console.log('toSellValue =', toSellValue)
