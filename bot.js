@@ -404,6 +404,7 @@ async function check(){
 
       let less = Number(last_price.binancecoin.usd)-Number(last_point)
       less = less + Number(_string);
+      period = Date.now() - time;
       if(less <= 0){
         console.log('block changed [||/]');
         let call= Number(last_price.tether.usd) * Number(balance_two);
@@ -421,13 +422,13 @@ async function check(){
             console.log("@",{toSellValue,toBuyValue})
             console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
             console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
-            await makeSwap(call,toBuyValue,toSellValue,rate,period);
+            await makeSwap(call,toBuyValue,toSellValue,amounts,period);
            }else{
             console.log('skipped',toSellValue)
            }
         }else{
           console.log(chalk.cyan(`IN SWAP not enabled`));
-          period = Date.now() - time;
+          
           update(toSellValue,rate,period);
         }
       }else{
