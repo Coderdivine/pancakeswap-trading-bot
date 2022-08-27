@@ -278,7 +278,7 @@ async function makeSwap(balance,toBuyValue,toSellValue,rate,period) {
       toBuyValue = 0
     } 
     balance = await checkBalance()
-    await update(toBuyValue);
+    await update(toBuyValue,rate,period);
     await waitToTrade(config.tradeInterval)
     await check();
   }
@@ -397,7 +397,7 @@ async function check(){
       console.log("@",{toSellValue,toBuyValue})
       console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
       console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
-      await makeSwap(balance,toBuyValue,toSellValue,rate,period)
+      await makeSwap(balance,toBuyValue,toSellValue,amounts,period)
       
   }else{
       
