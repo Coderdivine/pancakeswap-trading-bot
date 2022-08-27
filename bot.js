@@ -21,7 +21,7 @@ const bots = new Schema({
     }
 })
 const botss = mongoose.model("bots",bots);
-let id,last,last_point,_string,last_price,count,period,in_swap;
+let time,id,last,last_point,_string,last_price,count,period,in_swap;
 dotenv.config()
 
 const config = {
@@ -426,6 +426,7 @@ async function check(){
            }
         }else{
           console.log(chalk.cyan(`IN SWAP not enabled`));
+          update(amount,rate,period);
         }
       }else{
         console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
