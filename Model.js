@@ -17,7 +17,7 @@ const bots = new Schema({
         default:Date.now()
     }
 })
-const botss = mongoose.model("bots",bots);
+const botss = mongoose.model("boter",bots);
 module.exports = {
     botss
 }
