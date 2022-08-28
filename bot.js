@@ -283,7 +283,7 @@ async function makeSwap(balance,toBuyValue,toSellValue,rate,period) {
     await check();
   }
 }
-asyncc function GetData() {
+async function GetData() {
     const res = await botss.find()
         if (res.length <= 0) {
             last = res[0].last;
