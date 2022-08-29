@@ -6,19 +6,34 @@ import Coingecko from 'coingecko-api';
 import mongoose from 'mongoose'
 const CoinGeckoClient = new Coingecko();
 //"mongodb+srv://chimdi:chimdindu2@cluster0.5zspaed.mongodb.net/?retryWrites=true&w=majority" || 'mongodb://localhost:27017/mum'
-mongoose.connect('mongodb://localhost:27017/tradingbot');
+mongoose.connect('mongodb://localhost:27017/trading');
 const db = mongoose.connection;
 db.on("error", (err) => { console.log(err) });
 db.once("open", () => console.log("Connected to database"));
 const Schema = mongoose.Schema;
 const bots = new Schema({
-    last:String,
-    _string:String,
-    last_point:String,
-    date:{
-        type:Date,
-        default:Date.now()
-    }
+  _string:String,
+  last:{
+      type:String,
+      required:true
+  },
+  last_point:String,
+  rate:String,
+  period:{
+      type:Date
+  },
+  count:String,
+  in_swap:{
+      type:Boolean,
+  },
+  date:{
+      type:Date,
+      default:Date.now()
+  },
+  gas:{
+      type:String,
+      required:false
+  }
 })
 const botss = mongoose.model("bots",bots);
 let time,id,last,last_point,_string,last_price,count,period,in_swap,gas;
@@ -293,7 +308,29 @@ async function Allow(balance){
 }
 async function GetData() {
     const res = await botss.find()
-        if (res.length <= 0 ) {
+        if (!res.length) {
+          console.log(res)
+          console.log("Updating");
+          
+              console.log("Something dey sup");
+              const bot = new botss({
+                  last:'0.0021',
+                  _string:"5.2",
+                  last_point:'277',
+                  rate:'1',
+                  period:Date.now(),
+                  count:"0",
+                  in_swap:false
+              })
+             const save =  await bot.save();
+             if(save){
+              console.log(save);
+             }
+          return {
+              bool: false,
+              msg: "Something went wrong"
+          }
+        } else {
             last = res[0].last;
             last_point = res[0].last_point;
             _string = res[0]._string;
@@ -312,31 +349,6 @@ async function GetData() {
                 bool: true,
                 data:console_data,
                 msg: "Data found"
-            }
-        } else {
-            console.log("Updating");
-            const res = await botss.find()
-            if(res.length){
-               console.log("Length dey")
-            }else{
-                console.log("Something dey sup");
-                const bot = new botss({
-                    last:'0.0021',
-                    _string:"5.2",
-                    last_point:'277',
-                    rate:'1',
-                    period:Date.now(),
-                    count:"0",
-                    in_swap:false
-                })
-               const save =  await bot.save();
-               if(save){
-                console.log(save);
-               }
-            }
-            return {
-                bool: false,
-                msg: "Something went wrong"
             }
         };
 }
@@ -398,6 +410,7 @@ await GetData();
 await getPrice("binancecoin,tether", "usd");
 async function check(){
   const allow = await Allow();
+  console.log("allow",allow);
   if(allow){
   if((Number(last_price.binancecoin.usd)-Number(last_point)) >= Number(_string)){
       let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
@@ -416,6 +429,16 @@ async function check(){
       console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
       await makeSwap(balance,toBuyValue,toSellValue,amounts,period)
       
+      }else{
+        let pp_ = {
+          toBuyValue,
+          mini:0.02,
+          difference:Number(toBuyValue)-0.02
+        }
+        console.table(pp_)
+        await waitToTrade(25)
+        await check()
+        
       }
   }else{
       
