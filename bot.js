@@ -400,7 +400,7 @@ async function check(){
       console.log('amountChange',{amounts_one,amounts_two})
       let amounts = amounts_one-amounts_two;
       toBuyValue = Number(amounts)/last_price.binancecoin.usd;
-      if(toBuyValue >= 0.105){
+      if(toBuyValue > 0.02){
         // in bnb :)
         toBuyValue = toBuyValue.toFixed(6);
       toBuyValue = toBuyValue.toString();
@@ -462,7 +462,7 @@ async function check(){
 }else{
    const val = 0.1190 - Number(balance);
     //buying bnb
-    
+
 }
 }
 await check()
