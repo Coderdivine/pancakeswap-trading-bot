@@ -459,7 +459,9 @@ async function check(){
        await waitToTrade(config.tradeInterval);
       }
   }
-};
+}else{
+   const val = Number();
+}
 }
 await check()
 console.log('[INFO] Done.')
