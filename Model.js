@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bots = new Schema({
     _string:String,
-    last:String,
+    last:{
+        type:String,
+        required:false
+    },
     last_point:String,
     rate:String,
     period:{
