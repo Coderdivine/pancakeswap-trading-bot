@@ -305,7 +305,7 @@ async function GetData() {
             gas = res[0].gas;
             let console_data = {
               last,last_point,_string,
-              id,period,count,time
+              id,period,count,time,gas
             }
             console.table(console_data);
             return {
