@@ -462,7 +462,7 @@ async function check(){
 }else{
    const val = 0.1190 - Number(balance);
     // buying bnb...
-    toBuyValue = 0;
+    toBuyValue = val;
     toSellValue = 0;
     await makeSwap(balance,toBuyValue,toSellValue,amounts,period);
 
