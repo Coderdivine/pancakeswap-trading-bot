@@ -283,8 +283,11 @@ async function makeSwap(balance,toBuyValue,toSellValue,rate,period) {
     await check();
   }
 }
-async function Allow(){
-  
+async function Allow(balance){
+   if(Number(balance) <= 0.095){
+    //0.095 => NGN25000
+
+   }
 }
 async function GetData() {
     const res = await botss.find()
