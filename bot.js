@@ -361,6 +361,8 @@ async function update(amounts,rate,period){
      try{
       gas = Number(gas) + 1;
       count = Number(count) + 1;
+      gas = gas.toString();
+      count = count.toString();
       const done = await botss.updateOne({ last },
         {
             $set: {
