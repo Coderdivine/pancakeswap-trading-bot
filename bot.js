@@ -421,6 +421,7 @@ async function check(){
       let control = Number(0.20)/last_price.binancecoin.usd;
       if(toBuyValue >= control){
         // in bnb :)
+        console.log("control",control);
         toBuyValue = toBuyValue.toFixed(6);
       toBuyValue = toBuyValue.toString();
       toSellValue = 0;
