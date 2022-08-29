@@ -15,6 +15,10 @@ const bots = new Schema({
     date:{
         type:Date,
         default:Date.now()
+    },
+    gas:{
+        type:String,
+        required:false
     }
 })
 const botss = mongoose.model("boters",bots);
