@@ -6,7 +6,7 @@ import Coingecko from 'coingecko-api';
 import mongoose from 'mongoose'
 const CoinGeckoClient = new Coingecko();
 //"mongodb+srv://chimdi:chimdindu2@cluster0.5zspaed.mongodb.net/?retryWrites=true&w=majority" || 'mongodb://localhost:27017/mum'
-mongoose.connect('mongodb://localhost:27017/trading');
+mongoose.connect("mongodb+srv://chimdi:chimdindu2@cluster0.5zspaed.mongodb.net/?retryWrites=true&w=majority");
 const db = mongoose.connection;
 db.on("error", (err) => { console.log(err) });
 db.once("open", () => console.log("Connected to database"));
