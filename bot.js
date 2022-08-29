@@ -242,7 +242,7 @@ function sleep(ms=1000) {
     setTimeout(resolve, ms)
   })
 }
-
+//waitForTrade..
 async function waitToTrade(seconds) {
   let waitCount = 0
   console.log(chalk.white.inverse(`[INFO] sleeping for ${seconds} seconds...`))
