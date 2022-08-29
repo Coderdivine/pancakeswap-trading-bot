@@ -368,7 +368,7 @@ async function update(amounts,rate,period){
                 last_point:last_price.binancecoin.usd.toString(),
                 rate,
                 period,
-                count:Number(count)+1,
+                count,
                 gas,
             } 
         });
