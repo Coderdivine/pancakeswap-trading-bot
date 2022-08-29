@@ -4,7 +4,7 @@ const bots = new Schema({
     _string:String,
     last:{
         type:String,
-        required:false
+        required:true
     },
     last_point:String,
     rate:String,
