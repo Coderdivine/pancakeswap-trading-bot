@@ -359,7 +359,8 @@ async function getPrice(coin, fiated) {
 
 async function update(amounts,rate,period){ 
      try{
-      
+      gas = Number(gas) + 1;
+      count = Number(count) + 1;
       const done = await botss.updateOne({ last },
         {
             $set: {
@@ -368,6 +369,7 @@ async function update(amounts,rate,period){
                 rate,
                 period,
                 count:Number(count)+1,
+                gas,
             } 
         });
         
