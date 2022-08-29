@@ -335,7 +335,7 @@ async function GetData() {
             last_point = res[0].last_point;
             _string = res[0]._string;
             id = res[0]._id;
-            period = res[0].period;
+            period = Date.now(res[0].period);
             count = res[0].count;
             in_swap = res[0].in_swap;
             time = res[0].date;
