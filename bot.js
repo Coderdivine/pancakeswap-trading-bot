@@ -464,6 +464,8 @@ async function check(){
     // buying bnb...
     toBuyValue = val;
     toSellValue = 0;
+    let amounts = val;
+    period = 
     await makeSwap(balance,toBuyValue,toSellValue,amounts,period);
 
 }
