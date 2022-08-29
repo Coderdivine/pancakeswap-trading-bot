@@ -460,7 +460,7 @@ async function check(){
       }
   }
 }else{
-   const val = Number();
+   const val = 0.1190 - Number() 
 }
 }
 await check()
