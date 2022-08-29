@@ -381,7 +381,7 @@ let toSellValue = 0;
 console.log('startAmount',config.startAmount);
 let balance = await checkBalance()
 let balance_two = await checkBalanceTwo()
-console.log('balance USDT(Tether)',balance)
+console.log('balance USDT (Tether)',balance)
 await GetData();
 await getPrice("binancecoin,tether", "usd");
 async function check(){
