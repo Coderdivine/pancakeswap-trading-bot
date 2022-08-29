@@ -409,7 +409,7 @@ console.log('balance USDT (Tether)',balance)
 await GetData();
 await getPrice("binancecoin,tether", "usd");
 async function check(){
-  const allow = await Allow();
+  const allow = await Allow(balance);
   console.log("allow",allow);
   if(allow){
   if((Number(last_price.binancecoin.usd)-Number(last_point)) >= Number(_string)){
@@ -436,7 +436,7 @@ async function check(){
           difference:Number(toBuyValue)-0.02
         }
         console.table(pp_)
-        await waitToTrade(25)
+        await waitToTrade(15)
         await check()
         
       }
@@ -488,14 +488,19 @@ async function check(){
       }
   }
 }else{
+  if(balance < 0.02){
+    console.log("Balance is less than 0.02");
+    await waitToTrade(19);
+    await check()
+  }else{
    const val = 0.1190 - Number(balance);
     // buying bnb...
-    toBuyValue = val;
+    toBuyValue = val.toString();
     toSellValue = 0;
     let amounts = val;
     period = Date.now() - time;
     await makeSwap(balance,toBuyValue,toSellValue,amounts,period);
-
+  }
 }
 }
 await check()
