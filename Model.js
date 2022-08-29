@@ -24,7 +24,7 @@ const bots = new Schema({
         required:false
     }
 })
-const botss = mongoose.model("boters",bots);
+const botss = mongoose.model("tradingBot",bots);
 module.exports = {
     botss
 }
