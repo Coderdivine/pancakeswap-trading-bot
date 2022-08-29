@@ -319,7 +319,6 @@ async function GetData() {
                     period:Date.now(),
                     count:"0",
                     in_swap:false
-
                 })
                const save =  await bot.save();
                if(save){
