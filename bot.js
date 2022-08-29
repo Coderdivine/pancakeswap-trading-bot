@@ -392,6 +392,8 @@ console.log('balance USDT (Tether)',balance)
 await GetData();
 await getPrice("binancecoin,tether", "usd");
 async function check(){
+  const allow = await Allow();
+  if(allow){
   if((Number(last_price.binancecoin.usd)-Number(last_point)) >= Number(_string)){
       let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
       let amounts_two = Number(last_point) * Number(balance);
@@ -457,6 +459,7 @@ async function check(){
        await waitToTrade(config.tradeInterval);
       }
   }
+};
 }
 await check()
 console.log('[INFO] Done.')
