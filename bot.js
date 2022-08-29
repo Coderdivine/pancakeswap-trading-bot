@@ -460,7 +460,8 @@ async function check(){
       }
   }
 }else{
-   const val = 0.1190 - Number() 
+   const val = 0.1190 - Number(balance);
+    
 }
 }
 await check()
