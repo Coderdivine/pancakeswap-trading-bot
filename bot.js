@@ -465,7 +465,7 @@ async function check(){
     toBuyValue = val;
     toSellValue = 0;
     let amounts = val;
-    period = 
+    period = Date.now() - time;
     await makeSwap(balance,toBuyValue,toSellValue,amounts,period);
 
 }
