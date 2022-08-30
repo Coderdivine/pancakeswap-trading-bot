@@ -473,7 +473,9 @@ async function check(){
         }else{
           console.log(chalk.cyan(`IN SWAP not enabled`));
           
-          update(toSellValue,amounts,period);
+          //update(toSellValue,amounts,period);
+          await waitToTrade(config.tradeInterval);
+          await check();
         }
       //  if(amounts > 0.14990){
       //   console.log('amounts',amounts);23
