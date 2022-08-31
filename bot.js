@@ -1,7 +1,7 @@
-import  ethers from 'ethers'
-import  chalk from 'chalk'
-import  dotenv from 'dotenv'
-import  ora from'ora'
+import ethers from 'ethers'
+import chalk from 'chalk'
+import dotenv from 'dotenv'
+import ora from 'ora'
 import Coingecko from 'coingecko-api';
 import mongoose from 'mongoose'
 const CoinGeckoClient = new Coingecko();
@@ -12,31 +12,31 @@ db.on("error", (err) => { console.log(err) });
 db.once("open", () => console.log("Connected to database"));
 const Schema = mongoose.Schema;
 const bots = new Schema({
-  _string:String,
-  last:{
-      type:String,
-      required:true
+  _string: String,
+  last: {
+    type: String,
+    required: true
   },
-  last_point:String,
-  rate:String,
-  period:{
-      type:Date
+  last_point: String,
+  rate: String,
+  period: {
+    type: Date
   },
-  count:String,
-  in_swap:{
-      type:Boolean,
+  count: String,
+  in_swap: {
+    type: Boolean,
   },
-  date:{
-      type:Date,
-      default:Date.now()
+  date: {
+    type: Date,
+    default: Date.now()
   },
-  gas:{
-      type:String,
-      required:false
+  gas: {
+    type: String,
+    required: false
   }
 })
-const botss = mongoose.model("bots",bots);
-let time,id,last,last_point,_string,last_price,count,period,in_swap,gas;
+const botss = mongoose.model("bots", bots);
+let time, id, last, last_point, _string, last_price, count, period, in_swap, gas;
 dotenv.config()
 
 const config = {
@@ -89,7 +89,7 @@ const router = new ethers.Contract(
     "function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)",
     "function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)"
   ],
-  account )
+  account)
 
 const sa = new ethers.Contract(
   saAddress,
@@ -144,7 +144,7 @@ async function buyAction(buyQuantity) {
   try {
     let amountOutMin = 0
     let amountIn = ethers.utils.parseEther(buyQuantity)
-    if ( parseInt(config.slippage) !== 0 ){
+    if (parseInt(config.slippage) !== 0) {
       let amounts = await router.getAmountsOut(amountIn, [tokenIn, tokenOut])
       amountOutMin = amounts[1].sub(amounts[1].div(`${config.slippage}`))
     }
@@ -164,10 +164,10 @@ tokenOut: ${ethers.utils.formatEther(amountOutMin).toString()} ${tokenOut} (${sa
         wallet.address,
         Date.now() + 1000 * 60 * 5, //5 minutes
         {
-            'gasLimit': config.gasLimit,
-            'gasPrice': config.gasPrice,
-            'nonce' : null,
-            'value' : amountIn
+          'gasLimit': config.gasLimit,
+          'gasPrice': config.gasPrice,
+          'nonce': null,
+          'value': amountIn
         })
     } else {
       tx = await router.swapExactTokensForTokens(
@@ -186,11 +186,11 @@ tokenOut: ${ethers.utils.formatEther(amountOutMin).toString()} ${tokenOut} (${sa
     let lastSwapEvent = receipt.logs.slice(-1)[0]
     let swapInterface = new ethers.utils.Interface(['event Swap (address indexed sender, uint256 amount0In, uint256 amount1In, uint256 amount0Out, uint256 amount1Out, address indexed to)'])
     let parsed = swapInterface.parseLog(lastSwapEvent)
-    let receivedTokens = parsed.args.amount0Out.isZero() ?  parsed.args.amount1Out : parsed.args.amount0Out
+    let receivedTokens = parsed.args.amount0Out.isZero() ? parsed.args.amount1Out : parsed.args.amount0Out
     let tokens = ethers.utils.formatEther(receivedTokens)
     console.log(`Swapped for tokens: ${tokens} ${saSymbol}`)
     return tokens
-  } catch(err) {
+  } catch (err) {
     console.error(err)
     process.exit(1)
   }
@@ -201,7 +201,7 @@ async function sellAction(sellQuantity) {
   try {
     let amountInMin = 0
     let amountOut = ethers.utils.parseEther(sellQuantity)
-    if ( parseInt(config.slippage) !== 0 ){
+    if (parseInt(config.slippage) !== 0) {
       let amounts = await router.getAmountsIn(amountOut, [tokenIn, tokenOut])
       amountInMin = amounts[0].sub(amounts[0].div(`${config.slippage}`))
     }
@@ -222,8 +222,8 @@ tokenIn: ${ethers.utils.formatEther(amountInMin).toString()} ${tokenIn} (${token
         wallet.address,
         Date.now() + 1000 * 60 * 5, //5 minutes
         {
-            'gasLimit': config.gasLimit,
-            'gasPrice': config.gasPrice
+          'gasLimit': config.gasLimit,
+          'gasPrice': config.gasPrice
         })
     } else {
       tx = await router.swapExactTokensForTokens(
@@ -252,7 +252,7 @@ tokenIn: ${ethers.utils.formatEther(amountInMin).toString()} ${tokenIn} (${token
   }
 }
 
-function sleep(ms=1000) {
+function sleep(ms = 1000) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms)
   })
@@ -267,18 +267,18 @@ async function waitToTrade(seconds) {
     waitCount++
     spinner.text = `sleeping: ${waitCount}`
   }
-  if(last_price){
+  if (last_price) {
     await getPrice("binancecoin,tether", "usd")
     await GetData();
     await check();
-}else{
+  } else {
     await getPrice("binancecoin,tether", "usd")
-}
+  }
   spinner.stop()
   return
 }
 
-async function makeSwap(balance,toBuyValue,toSellValue,rate,period) {
+async function makeSwap(balance, toBuyValue, toSellValue, rate, period) {
   if (balance > config.walletMin) {
     console.log('toBuyValue =', toBuyValue)
     console.log('toSellValue =', toSellValue)
@@ -291,221 +291,223 @@ async function makeSwap(balance,toBuyValue,toSellValue,rate,period) {
       console.log('[INFO] initiating buy...')
       toSellValue = await buyAction(toBuyValue)
       toBuyValue = 0
-    } 
+    }
     balance = await checkBalance()
-    await update(toBuyValue,rate,period);
+    await update(toBuyValue, rate, period);
     await waitToTrade(config.tradeInterval)
     await check();
   }
 }
-async function Allow(balance){
-   if(Number(balance) <= 0.095){
+async function Allow(balance) {
+  if (Number(balance) <= 0.095) {
     //0.095 => NGN25000
     return false
-   }else{
+  } else {
     return true;
-   }
+  }
 }
 async function GetData() {
-    const res = await botss.find()
-        if (!res.length) {
-          console.log(res)
-          console.log("Updating");
-          
-              console.log("Something dey sup");
-              const bot = new botss({
-                  last:'0.0021',
-                  _string:"5.2",
-                  last_point:'277',
-                  rate:'1',
-                  period:Date.now(),
-                  count:"0",
-                  in_swap:false
-              })
-             const save =  await bot.save();
-             if(save){
-              console.log(save);
-             }
-          return {
-              bool: false,
-              msg: "Something went wrong"
-          }
-        } else {
-            last = res[0].last;
-            last_point = res[0].last_point;
-            _string = res[0]._string;
-            id = res[0]._id;
-            period = Date.now(res[0].period);
-            count = res[0].count;
-            in_swap = res[0].in_swap;
-            time = Date.now(res[0].date);
-            gas = res[0].gas;
-            let console_data = {
-              last,last_point,_string,
-              id,period,count,time,gas
-            }
-            console.table(console_data);
-            return {
-                bool: true,
-                data:console_data,
-                msg: "Data found"
-            }
-        };
+  const res = await botss.find()
+  if (!res.length) {
+    console.log(res)
+    console.log("Updating");
+
+    console.log("Something dey sup");
+    const bot = new botss({
+      last: '0.0021',
+      _string: "5.2",
+      last_point: '277',
+      rate: '1',
+      period: Date.now(),
+      count: "0",
+      in_swap: false
+    })
+    const save = await bot.save();
+    if (save) {
+      console.log(save);
+    }
+    return {
+      bool: false,
+      msg: "Something went wrong"
+    }
+  } else {
+    last = res[0].last;
+    last_point = res[0].last_point;
+    _string = res[0]._string;
+    id = res[0]._id;
+    period = Date.now(res[0].period);
+    count = res[0].count;
+    in_swap = res[0].in_swap;
+    time = Date.now(res[0].date);
+    gas = res[0].gas;
+    let console_data = {
+      last, last_point, _string,
+      id, period, count, time, gas
+    }
+    console.table(console_data);
+    return {
+      bool: true,
+      data: console_data,
+      msg: "Data found"
+    }
+  };
 }
 async function getPrice(coin, fiated) {
-    let fiat = fiated.toLowerCase();
-    let data = await CoinGeckoClient.simple.price({
-        ids: [coin],
-        vs_currencies: [fiat],
-    });
-    last_price = data.data;
-    if (data.code == 200) {
-        console.log(`${coin}`, data);
-        data = data.data;
-        return data
-    } else {
-        console.log(`${coin}`, last_price);
-        return last_price;
-    }
+  let fiat = fiated.toLowerCase();
+  let data = await CoinGeckoClient.simple.price({
+    ids: [coin],
+    vs_currencies: [fiat],
+  });
+  last_price = data.data;
+  if (data.code == 200) {
+    console.log(`${coin}`, data);
+    data = data.data;
+    return data
+  } else {
+    console.log(`${coin}`, last_price);
+    return last_price;
+  }
 
 }
 
-async function update(amounts,rate,period){ 
-     try{
-      gas = Number(gas) + 1;
-      count = Number(count) + 1;
-      gas = gas.toString();
-      count = count.toString();
-      const done = await botss.updateOne({ last },
-        {
-            $set: {
-                last:amounts.toString(),
-                last_point:last_price.binancecoin.usd.toString(),
-                rate,
-                period,
-                count,
-                gas,
-            } 
-        });
-        
-         if(done){
-                  console.log(done);
-                  console.log("A trade was made: updated");
-                  console.log("swaped")
-          }
-          console.log('updated')
-     }catch(err){
-      console.log(err.message);
-     }
+async function update(amounts, rate, period) {
+  try {
+    gas = Number(gas) + 1;
+    count = Number(count) + 1;
+    gas = gas.toString();
+    count = count.toString();
+    const done = await botss.updateOne({ last },
+      {
+        $set: {
+          last: amounts.toString(),
+          last_point: last_price.binancecoin.usd.toString(),
+          rate,
+          period,
+          count,
+          gas,
+        }
+      });
+
+    if (done) {
+      console.log(done);
+      console.log("A trade was made: updated");
+      console.log("swaped")
+    }
+    console.log('updated')
+  } catch (err) {
+    console.log(err.message);
+  }
 }
 //
 console.log('[INFO] RUNNING. Press ctrl+C to exit.')
 let toBuyValue = config.startAmount;
 let toSellValue = 0;
-console.log('startAmount',config.startAmount);
+console.log('startAmount', config.startAmount);
 let balance = await checkBalance()
 let balance_two = await checkBalanceTwo()
-console.log('balance USDT (Tether)',balance)
+console.log('balance USDT (Tether)', balance)
 await GetData();
 await getPrice("binancecoin,tether", "usd");
-async function check(){
+async function check() {
   const allow = await Allow(balance);
-  console.log("allow",allow);
-  if(allow){
-  if((Number(last_price.binancecoin.usd)-Number(last_point)) >= Number(_string)){
+  console.log("allow", allow);
+  if (allow) {
+    if ((Number(last_price.binancecoin.usd) - Number(last_point)) >= Number(_string)) {
       let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
       let amounts_two = Number(last_point) * Number(balance);
-      console.table({amounts_one,amounts_two})
-      let amounts = amounts_one-amounts_two;
-      toBuyValue = Number(amounts)/last_price.binancecoin.usd;
-      let control = Number(0.20)/last_price.binancecoin.usd;
-      if(toBuyValue >= control){
+      console.table({ amounts_one, amounts_two })
+      let amounts = amounts_one - amounts_two;
+      toBuyValue = Number(amounts) / last_price.binancecoin.usd;
+      let control = Number(0.20) / last_price.binancecoin.usd;
+      if (toBuyValue >= control) {
         // in bnb :)
-        console.log("control",control);
+        console.log("control", control);
         toBuyValue = toBuyValue.toFixed(6);
-      toBuyValue = toBuyValue.toString();
-      toSellValue = 0;
-      console.log('amounts',amounts);
-      console.log("@",{toSellValue,toBuyValue})
-      console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
-      console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
-      await makeSwap(balance,toBuyValue,toSellValue,amounts,period)
-      
-      }else{
+        toBuyValue = toBuyValue.toString();
+        toSellValue = 0;
+        console.log('amounts', amounts);
+        console.log("@", { toSellValue, toBuyValue })
+        console.log('change', Number(last_price.binancecoin.usd) - Number(last_point))
+        console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
+        await makeSwap(balance, toBuyValue, toSellValue, amounts, period)
+
+      } else {
         let pp_ = {
           toBuyValue,
-          mini:0.02,
-          difference:Number(toBuyValue)-0.02
+          mini: 0.02,
+          difference: Number(toBuyValue) - 0.02
         }
         console.table(pp_)
         await waitToTrade(15)
         await check()
-        
-      }
-  }else{
-      
 
-      let less = Number(last_price.binancecoin.usd)-Number(last_point)
+      }
+    } else {
+
+
+      let less = Number(last_price.binancecoin.usd) - Number(last_point)
       less = less + Number(_string);
       period = Date.now() - time;
-      if(less <= 0){
+      if (less <= 0) {
         console.log('block changed [||/]');
-        let call= Number(last_price.tether.usd) * Number(balance_two);
+        let call = Number(last_price.tether.usd) * Number(balance_two);
         let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
         let amounts_two = Number(last_point) * Number(balance);
-        console.log('am_one,am_two',{amounts_one,amounts_two})
-        let amounts = amounts_two-amounts_one;
+        console.log('am_one,am_two', { amounts_one, amounts_two })
+        let amounts = amounts_two - amounts_one;
         amounts = amounts.toString();
         toSellValue = Number(amounts)///last_price.tether.usd;
         toSellValue = toSellValue.toFixed(6);
         toSellValue = toSellValue.toString();
         toBuyValue = 0;
-        if(in_swap){
-          if(amounts >= 0.10){
-            console.log('amounts',amounts);
-            console.log("@",{toSellValue,toBuyValue})
-            console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
+        if (in_swap) {
+          if (amounts >= 0.10) {
+            console.log('amounts', amounts);
+            console.log("@", { toSellValue, toBuyValue })
+            console.log('change', Number(last_price.binancecoin.usd) - Number(last_point))
             console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
-            await makeSwap(call,toBuyValue,toSellValue,amounts,period);
-           }else{
-            console.log('skipped',toSellValue)
-           }
-        }else{
+            await makeSwap(call, toBuyValue, toSellValue, amounts, period);
+          } else {
+            console.log('skipped', toSellValue)
+            await waitToTrade(config.tradeInterval);
+            await check();
+          }
+        } else {
           console.log(chalk.cyan(`IN SWAP not enabled`));
-          
+
           //update(toSellValue,amounts,period);
           await waitToTrade(config.tradeInterval);
           await check();
         }
-      //  if(amounts > 0.14990){
-      //   console.log('amounts',amounts);23
-      //   console.log("@",{toSellValue,toBuyValue})
-      //   console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
-      //   console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
-      // await makeSwap(call,toBuyValue,toSellValue)
-      //  }else{
-      //   console.log('skipped',toSellValue)
-      //  }
-          }else{
-        console.log('still less',Number(last_price.binancecoin.usd)-Number(last_point))
-       await waitToTrade(config.tradeInterval);
+        //  if(amounts > 0.14990){
+        //   console.log('amounts',amounts);23
+        //   console.log("@",{toSellValue,toBuyValue})
+        //   console.log('change',Number(last_price.binancecoin.usd)-Number(last_point))
+        //   console.log(`${last_price.binancecoin.usd}`, last_price.binancecoin.usd);
+        // await makeSwap(call,toBuyValue,toSellValue)
+        //  }else{
+        //   console.log('skipped',toSellValue)
+        //  }
+      } else {
+        console.log('still less', Number(last_price.binancecoin.usd) - Number(last_point))
+        await waitToTrade(config.tradeInterval);
       }
+    }
+  } else {
+    if (balance < 0.02) {
+      console.log("Balance is less than 0.02");
+      await waitToTrade(19);
+      await check()
+    } else {
+      const val = 0.1190 - Number(balance);
+      // buying bnb...
+      toBuyValue = val.toString();
+      toSellValue = 0;
+      let amounts = val;
+      period = Date.now() - time;
+      await makeSwap(balance, toBuyValue, toSellValue, amounts, period);
+    }
   }
-}else{
-  if(balance < 0.02){
-    console.log("Balance is less than 0.02");
-    await waitToTrade(19);
-    await check()
-  }else{
-   const val = 0.1190 - Number(balance);
-    // buying bnb...
-    toBuyValue = val.toString();
-    toSellValue = 0;
-    let amounts = val;
-    period = Date.now() - time;
-    await makeSwap(balance,toBuyValue,toSellValue,amounts,period);
-  }
-}
 }
 await check()
 console.log('[INFO] Done.')
