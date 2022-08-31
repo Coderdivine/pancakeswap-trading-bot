@@ -491,7 +491,7 @@ async function check() {
       } else {
         console.log('still less', Number(last_price.binancecoin.usd) - Number(last_point))
         await waitToTrade(config.tradeInterval);
-        await check()
+        await check();
       }
     }
   } else {
@@ -510,5 +510,5 @@ async function check() {
     }
   }
 }
-await check()
-console.log('[INFO] Done.')
+await check();
+console.log('[INFO] Done.');
