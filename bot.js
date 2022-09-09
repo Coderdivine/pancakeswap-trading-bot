@@ -299,7 +299,7 @@ async function makeSwap(balance, toBuyValue, toSellValue, rate, period) {
   }
 }
 async function Allow(balance) {
-  if (Number(balance) <= 0.095) {
+  if (Number(balance) <= 0.070) {
     //0.095 => NGN25000
     return false
   } else {
