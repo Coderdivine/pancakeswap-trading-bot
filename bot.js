@@ -162,7 +162,7 @@ tokenOut: ${ethers.utils.formatEther(amountOutMin).toString()} ${tokenOut} (${sa
         amountOutMin,
         [tokenIn, tokenOut],
         wallet.address,
-        Date.now() + 1000 * 60 * 5, //5 minutes
+        Date.now() + 1000 * 60 * 10, //5 minutes
         {
           'gasLimit': config.gasLimit,
           'gasPrice': config.gasPrice,
