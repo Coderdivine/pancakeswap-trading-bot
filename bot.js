@@ -81,55 +81,14 @@ const SYMBBOL_ = "BNBUSDT";
 const interval = '15m';
 
 // Get the last 200 candlesticks for the trading pair and interval
-// async function calculateRSI(symbol, interval, callback) {
-//   try {
-//     const closingPrices = [];
 
-//     binance.websockets.candlesticks(symbol, interval, (candlesticks) => {
-//       let { e:eventType, E:eventTime, s:symbol, k:ticks } = candlesticks;
-//       let { o:open, h:high, l:low, c:close_, v:volume, n:trades, i:interval, x:isFinal, q:quoteVolume, V:buyVolume, Q:quoteBuyVolume } = ticks;
-//       console.info(symbol+" "+interval+" candlestick update");
-//       console.info("open: "+open);
-//       console.info("high: "+high);
-//       console.info("low: "+low);
-//       console.info("close: "+close);
-//       console.info("volume: "+volume);
-//       console.info("isFinal: "+isFinal);
-//       const close = parseFloat(close_);
-//       closingPrices.push(close);
-//       console.log({closingPrices,close});
-
-//       if (closingPrices.length > 30) {
-//         closingPrices.shift();
-//       }
-//       console.log(["closingPrices",closingPrices.length])
-
-//       if (closingPrices.length <= 30) {
-//         const periods = 14;
-//         const changes = closingPrices.slice(1).map((price, i) => price - closingPrices[i - 1]);
-//         const gains = changes.map(change => change > 0 ? change : 0);
-//         const losses = changes.map(change => change < 0 ? Math.abs(change) : 0);
-//         const avgGain = gains.slice(-periods).reduce((a, b) => a + b, 0) / periods;
-//         const avgLoss = losses.slice(-periods).reduce((a, b) => a + b, 0) / periods;
-
-//         const relativeStrength = avgGain / avgLoss;
-//         const rsi = 100 - (100 / (1 + relativeStrength));
-
-//         const result = { symbol, interval, rsi };
-//         console.table(result);
-//         callback(result);
-//       }
-
-//     });
-//   } catch (error) {
-//     console.error(`Error retrieving candlestick data for ${symbol} (${interval}):...`);
-//     console.error({ BD: error });
-//   }
-// }
 
 async function getBNBPriceChangePerDay() {
+  console.log("4")
+
   const ticker = SYMBBOL_; // Binance Coin (BNB) trading pair
-  const klines = await binance.candlesticks(ticker, '1d'); // get daily klines for BNB
+  const klines = await binance.candlesticks(ticker, '1d'); 
+  console.log("RECENT:::>")// get daily klines for BNB
   const prevClose = parseFloat(klines[klines.length - 2][4]); // previous day's closing price
   const currentClose = parseFloat(klines[klines.length - 1][4]); // current day's closing price
   const priceChange = currentClose - prevClose; // price change per day
@@ -151,12 +110,14 @@ async function getBNBPriceChangePerDay() {
     priceChange,
     sign:priceChange < 0?"-":"+"
   });
+  console.log("5")
+
 
   return threshold;
 };
 
+console.log("6")
 threshold = await getBNBPriceChangePerDay();
-console.log("4")
 
 
 
@@ -167,7 +128,6 @@ function formatTimestamp(timestamp) {
   const year = date.getFullYear().toString();
   return `${day}-${month}-${year}`;
 }
-console.log("5")
 
 
 
@@ -219,7 +179,6 @@ switch (config.startCoin) {
   default:
     tokenIn = wbnbAddress
 }
-console.log("6")
 
 
 const router = new ethers.Contract(
