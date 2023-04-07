@@ -11,14 +11,19 @@ const binance = new Binance()
   APIKEY:process.env.BINANCE_APIKEY,
   APISECRET:process.env.BINANCE_APISECRET
 });
-console.log(binance);
 
 const CoinGeckoClient = new Coingecko();
-mongoose.connect( "mongodb+srv://chimdindu:chimdindu@cluster0.5zspaed.mongodb.net/?retryWrites=true&w=majority" || process.env.MONGO_URI || 'mongodb://localhost:27017/');
+console.log("1")
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/');
 const db = mongoose.connection;
+console.log("2")
 db.on("error", (err) => { console.log(err) });
+console.log("3")
 db.once("open", () => console.log("Connected to database"));
+console.log("4")
 const Schema = mongoose.Schema;
+console.log("5");
+
 
 
 const BotSchema = new Schema({
