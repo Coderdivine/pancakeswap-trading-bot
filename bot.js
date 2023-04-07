@@ -10,6 +10,7 @@ const binance = new Binance()
 .options({
   APIKEY:process.env.BINANCE_APIKEY,
   APISECRET:process.env.BINANCE_APISECRET,
+  family:0,
   verbose: true, // Add extra output when subscribing to WebSockets, etc
   log: log => {
     console.log(log); // You can create your own logger here, or disable console output
