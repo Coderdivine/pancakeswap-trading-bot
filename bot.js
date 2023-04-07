@@ -14,7 +14,7 @@ const binance = new Binance()
 
 const CoinGeckoClient = new Coingecko();
 console.log({MONGO_URI:process.env.MONGO_URI})
-mongoose.connect( process.env.MONGO_URI || 'mongodb://localhost:27017/');
+mongoose.connect( "mongodb+srv://chimdindu:chimdindu@cluster0.5zspaed.mongodb.net/?retryWrites=true&w=majority" || process.env.MONGO_URI || 'mongodb://localhost:27017/');
 const db = mongoose.connection;
 db.on("error", (err) => { console.log(err) });
 db.once("open", () => console.log("Connected to database"));
