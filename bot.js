@@ -116,8 +116,9 @@ async function getBNBPriceChangePerDay() {
   return threshold;
 };
 
-console.log("6")
 threshold = await getBNBPriceChangePerDay();
+console.log("6")
+
 
 
 
