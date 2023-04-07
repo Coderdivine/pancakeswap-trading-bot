@@ -189,7 +189,7 @@ const btcAddress = "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c";
 const busdAddress = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
 const pancakeswapRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
 
-const bsc = process.env.BSC_NODE
+const bsc = process.env.BSC_NODE;
 const mnemonic = process.env.YOUR_MNEMONIC
 const tokenOut = saAddress
 const provider = new ethers.providers.JsonRpcProvider(bsc)
