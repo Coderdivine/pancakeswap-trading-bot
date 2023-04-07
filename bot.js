@@ -10,7 +10,7 @@ const binance = new Binance()
 .options({
   APIKEY:process.env.BINANCE_APIKEY,
   APISECRET:process.env.BINANCE_APISECRET,
-  family:0
+  family:4
 });
 
 const CoinGeckoClient = new Coingecko();
