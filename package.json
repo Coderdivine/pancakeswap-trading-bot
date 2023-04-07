@@ -1,14 +1,15 @@
 {
-  "name": "chimdi-bot",
+  "name": "chimdi-bot-v2",
   "version": "1.0.0",
-  "description": "",
+  "description": "My bot ( Swing Trading strategy calculation )",
   "main": "bot.js",
   "type": "module",
   "scripts": {
     "test": "node bot.js",
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
   },
-  "author": "",
+  "author": "Chimdi",
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.0.0",
@@ -16,6 +17,8 @@
     "dotenv": "^10.0.0",
     "ethers": "^5.5.2",
     "mongoose": "^6.5.2",
+    "node-binance-api": "^0.13.1",
+    "nodemon": "^2.0.22",
     "ora": "^6.0.1"
   }
 }
