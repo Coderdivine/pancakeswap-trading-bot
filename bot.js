@@ -9,7 +9,8 @@ import Binance from 'node-binance-api';
 const binance = new Binance()
 .options({
   APIKEY:process.env.BINANCE_APIKEY,
-  APISECRET:process.env.BINANCE_APISECRET
+  APISECRET:process.env.BINANCE_APISECRET,
+  family:0
 });
 
 const CoinGeckoClient = new Coingecko();
