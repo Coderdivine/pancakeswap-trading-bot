@@ -13,16 +13,11 @@ const binance = new Binance()
 });
 
 const CoinGeckoClient = new Coingecko();
-console.log("1")
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/');
 const db = mongoose.connection;
-console.log("2")
 db.on("error", (err) => { console.log(err) });
-console.log("3")
 db.once("open", () => console.log("Connected to database"));
-console.log("4")
 const Schema = mongoose.Schema;
-console.log("5");
 
 
 
@@ -68,13 +63,18 @@ const BotSchema = new Schema({
     type: Number,
   }
 });
+console.log("1")
+
 
 const botss = mongoose.model("swing-bot-2023", BotSchema);
+console.log("2")
 
 //Declare variables...
 let 
 time, id, last, last_point, _string, last_price, count, period, in_swap, gas, threshold,
 startPrice, percentage_change_in_price, old_threshold;
+console.log("3")
+
 
 // Set the trading pair and interval
 const SYMBBOL_ = "BNBUSDT";
@@ -156,6 +156,8 @@ async function getBNBPriceChangePerDay() {
 };
 
 threshold = await getBNBPriceChangePerDay();
+console.log("4")
+
 
 
 function formatTimestamp(timestamp) {
@@ -165,6 +167,8 @@ function formatTimestamp(timestamp) {
   const year = date.getFullYear().toString();
   return `${day}-${month}-${year}`;
 }
+console.log("5")
+
 
 
 
@@ -215,6 +219,8 @@ switch (config.startCoin) {
   default:
     tokenIn = wbnbAddress
 }
+console.log("6")
+
 
 const router = new ethers.Contract(
   pancakeswapRouterAddress,
