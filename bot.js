@@ -10,11 +10,6 @@ const binance = new Binance()
 .options({
   APIKEY:process.env.BINANCE_APIKEY,
   APISECRET:process.env.BINANCE_APISECRET,
-  family:0,
-  verbose: true, // Add extra output when subscribing to WebSockets, etc
-  log: log => {
-    console.log(log); // You can create your own logger here, or disable console output
-  }
 });
 
 const CoinGeckoClient = new Coingecko();
@@ -68,17 +63,14 @@ const BotSchema = new Schema({
     type: Number,
   }
 });
-console.log("1")
 
 
 const botss = mongoose.model("swing-bot-2023", BotSchema);
-console.log("2")
 
 //Declare variables...
 let 
 time, id, last, last_point, _string, last_price, count, period, in_swap, gas, threshold,
-startPrice, percentage_change_in_price, old_threshold;
-console.log("3")
+startPrice, percentage_change_in_price, old_threshold, new_threshold;
 
 
 // Set the trading pair and interval
@@ -121,8 +113,7 @@ async function getBNBPriceChangePerDay() {
   return threshold;
 };
 
-threshold = await getBNBPriceChangePerDay();
-console.log("6")
+
 
 
 
@@ -490,12 +481,14 @@ async function GetData() {
     startPrice = res[0].startPrice;
     percentage_change_in_price = res[0].percentage_change_in_price;
     old_threshold = res[0].old_threshold;
+    new_threshold = res[0].new_threshold;
     let console_data = {
       last, last_point, _string,
       startPrice,
       id, period, count, time, gas,
       old_threshold,
-      percentage_change_in_price
+      percentage_change_in_price,
+      new_threshold
     }
     console.table(console_data);
     return {
@@ -543,6 +536,8 @@ async function update(amounts, rate, period) {
           period,
           count,
           gas,
+          new_threshold:threshold,
+          old_threshold:new_threshold
         }
       });
 
@@ -559,23 +554,22 @@ async function update(amounts, rate, period) {
 
 //Run bot simulation...
 console.log('[INFO] RUNNING. Press ctrl+C to exit.')
-let toBuyValue = config.startAmount; //(Need update)
-let toSellValue = 0; //(Need update)
+let toBuyValue = config.startAmount; //(Need update)...
+let toSellValue = 0; //(Need update)...
 
-console.table({startAmount:config.startAmount});
-let balance = await checkBalance();
-let balance_two = await checkBalanceTwo();
-console.table({WBNB:balance,USDT:balance_two});
 
-// await calculateRSI(SYMBBOL_, interval, (rsi) => {
-//   console.log(`RSI for ${rsi.symbol} (${rsi.interval}): ${rsi.rsi}`);
-// });
 
-await GetData();
-await getPrice("binancecoin,tether", "usd");
 
 //Run bot simulation Check...
 async function check() {
+  console.table({startAmount:config.startAmount});
+let balance = await checkBalance();
+let balance_two = await checkBalanceTwo();
+console.table({WBNB:balance,USDT:balance_two});
+await GetData();
+await getPrice("binancecoin,tether", "usd");
+
+  threshold = await getBNBPriceChangePerDay();
   const allow = await Allow(balance);
   console.table({allow});
   if (allow) {
