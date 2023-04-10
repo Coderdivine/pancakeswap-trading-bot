@@ -11,14 +11,15 @@ const binance = new Binance()
   APIKEY:process.env.BINANCE_APIKEY,
   APISECRET:process.env.BINANCE_APISECRET,
 });
-
 const CoinGeckoClient = new Coingecko();
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/');
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017');
 const db = mongoose.connection;
 db.on("error", (err) => { console.log(err) });
 db.once("open", () => console.log("Connected to database"));
 const Schema = mongoose.Schema;
-
+let time, id, last, last_point, _string, last_price, count, 
+period, in_swap, gas, threshold, startPrice, percentage_change_in_price, 
+old_threshold, new_threshold, gasOverAll, dates, gasVolume, gain, gainCount, gainBreak;
 
 
 const BotSchema = new Schema({
@@ -61,34 +62,49 @@ const BotSchema = new Schema({
   },
   old_threshold:{
     type: Number,
+  },
+  gasOverAll:{
+    type:[String]
+  },
+  dates:{
+    type:[Date],
+  },
+  gasVolume:{
+    type:Number,
+  },
+  gain:{
+    type:[Number]
+  },
+  gainCount:{
+      type:Number
+  },
+  gainBreak:{
+    type:Number
   }
 });
 
+const botss = mongoose.model("swingbot-2023", BotSchema);
 
-const botss = mongoose.model("swing-bot-2023", BotSchema);
-
-//Declare variables...
-let 
-time, id, last, last_point, _string, last_price, count, period, in_swap, gas, threshold,
-startPrice, percentage_change_in_price, old_threshold, new_threshold;
-
-
-// Set the trading pair and interval
+// Set the trading pair and interval...
 const SYMBBOL_ = "BNBUSDT";
 const interval = '15m';
 
 // Get the last 200 candlesticks for the trading pair and interval
-
-
 async function getBNBPriceChangePerDay() {
-  console.log("4")
+  const ticker = 'binancecoin'; // Binance Coin (BNB) symbol on Coingecko
+  const data = await CoinGeckoClient.coins.fetch(ticker, {
+    tickers: false,
+    market_data: true,
+    community_data: false,
+    developer_data: false,
+    localization: false,
+    sparkline: false
+  }); // get coin data for BNB
 
-  const ticker = SYMBBOL_; // Binance Coin (BNB) trading pair
-  const klines = await binance.candlesticks(ticker, '1d'); 
-  console.log("RECENT:::>")// get daily klines for BNB
-  const prevClose = parseFloat(klines[klines.length - 2][4]); // previous day's closing price
-  const currentClose = parseFloat(klines[klines.length - 1][4]); // current day's closing price
-  const priceChange = currentClose - prevClose; // price change per day
+  const currentClose = parseFloat(data.data.market_data.current_price.usd); // current day's closing price
+  const prevClose = currentClose / (1 + (data.data.market_data.price_change_percentage_24h_in_currency.usd / 100));
+  // const prevClose = parseFloat(data.data.market_data.price_change_percentage_24h) / 100 + 1; // previous day's closing price
+  const priceChange = currentClose / prevClose - 1; // price change per day
 
   // calculate threshold based on price change per day
   let threshold = 0;
@@ -109,14 +125,41 @@ async function getBNBPriceChangePerDay() {
   });
   console.log("5")
 
-
   return threshold;
-};
+}
 
 
+// async function getBNBPriceChangePerDay() {
+
+//   const ticker = SYMBBOL_; // Binance Coin (BNB) trading pair
+//   const klines = await binance.candlesticks(ticker, '1d'); 
+//   console.log("RECENT:::>")// get daily klines for BNB
+//   const prevClose = parseFloat(klines[klines.length - 2][4]); // previous day's closing price
+//   const currentClose = parseFloat(klines[klines.length - 1][4]); // current day's closing price
+//   const priceChange = currentClose - prevClose; // price change per day
+
+//   // calculate threshold based on price change per day
+//   let threshold = 0;
+//   if (priceChange >= 0) {
+//     threshold = Math.min(priceChange * 0.5, 12); // threshold capped at 12
+//   } else {
+//     threshold = Math.max(priceChange * 0.5, -12); // threshold capped at -12
+//   }
+//   threshold = Math.max(threshold, 2); // threshold floor at 2
+//   console.log(":::> threshold = ", threshold);
+
+//   console.log({
+//     threshold,
+//     currentClose,
+//     prevClose,
+//     priceChange,
+//     sign:priceChange < 0?"-":"+"
+//   });
+//   console.log("5")
 
 
-
+//   return threshold;
+// }
 
 function formatTimestamp(timestamp) {
   const date = new Date(timestamp);
@@ -124,6 +167,82 @@ function formatTimestamp(timestamp) {
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear().toString();
   return `${day}-${month}-${year}`;
+}
+
+//Get recent transactions for db...
+async function GetData() {
+  const res = await botss.find({});
+  if (!res.length) {
+    console.log(res)
+    console.log(":::> Creating new BOT");
+    const bot = new botss({
+      last:"0",
+      _string: "3",
+      last_point: '289',
+      rate: '1',
+      period: Date.now(),
+      count: "0",
+      in_swap: false,
+      gas:"0",
+      new_threshold:0,
+      startPrice:"0",
+      percentage_change_in_price:0,
+      old_threshold:0,
+      gasOverAll:[0],
+      dates:[0],
+      gain:[0],
+      gasVolume:0,
+      gainCount:0,
+      gasBreak:0
+    });
+    const save = await bot.save();
+    if (save) {
+      console.table(save);
+    }
+    return {
+      bool: false,
+      msg: "Something went wrong"
+    }
+  } else {
+    last = res[0].last;
+    last_point = res[0].last_point;
+    _string = res[0]._string;
+    id = res[0]._id;
+    period = formatTimestamp(res[0].period);
+    count = res[0].count;
+    in_swap = res[0].in_swap;
+    time = formatTimestamp(res[0].date);
+    gas = res[0].gas;
+    startPrice = res[0].startPrice;
+    percentage_change_in_price = res[0].percentage_change_in_price;
+    old_threshold = res[0].old_threshold;
+    new_threshold = res[0].new_threshold;
+    gasOverAll = res[0].gasOverAll;
+    dates = res[0].dates;
+    gasVolume = res[0].gasVolume
+    gain = res[0].gain;
+    gainCount = res[0].gainCount;
+    gainBreak = res[0].gainBreak;
+
+    let console_data = {
+      last, last_point, _string,
+      startPrice,
+      id, period, count, time, gas,
+      old_threshold,
+      percentage_change_in_price,
+      new_threshold,
+      gasOverAll,
+      dates,
+      gasVolume, gainBreak,
+      gain, gainCount
+    }
+    console.table(console_data);
+    return {
+      bool: true,
+      data: console_data,
+      msg: "Data found"
+    }
+  };
 }
 
 
@@ -162,9 +281,8 @@ const tokenOut = saAddress
 const provider = new ethers.providers.JsonRpcProvider(bsc)
 const wallet = new ethers.Wallet.fromMnemonic(mnemonic)
 const account = wallet.connect(provider);
-console.log({["USE ADDRESS (HEX) :::>"]:wallet.address});
 
-let tokenIn = ""
+let tokenIn = "";
 
 switch (config.startCoin) {
   case 'btc':
@@ -201,8 +319,7 @@ const sa = new ethers.Contract(
     "function symbol() view returns (string)",
     "function balanceOf(address) view returns (uint)",
   ],
-  account
-)
+  account)
 
 const tokenContract = new ethers.Contract(
   tokenIn,
@@ -211,8 +328,7 @@ const tokenContract = new ethers.Contract(
     "function symbol() view returns (string)",
     "function balanceOf(address) view returns (uint)",
   ],
-  account
-)
+  account)
 
 const saSymbol = await sa.symbol()
 const tokenSymbol = await tokenContract.symbol()
@@ -249,7 +365,7 @@ async function checkBalanceTwo() {
 
 //Make a buy Option...
 async function buyAction(buyQuantity) {
-  //USDT usnng BNB
+  //USDT using BNB
   console.log(chalk.yellow('[INFO] ready to BUY'))
   try {
     let amountOutMin = 0;
@@ -377,7 +493,7 @@ async function sellAction(sellQuantity) {
 }
 
 //Create a sleep function...
-function sleep(ms = 1000) {
+function sleep(ms = 1111) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms)
   })
@@ -437,6 +553,7 @@ async function makeSwap(balance, toBuyValue, toSellValue, rate, period) {
 
 //Enable or disable trading...
 async function Allow(balance) {
+  // 0.10bnb == NGN15k
   if (Number(balance) <= 0.060) {
     //0.095 => NGN25000
     return false
@@ -445,59 +562,7 @@ async function Allow(balance) {
   }
 }
 
-//Get recent transactions for db...
-async function GetData() {
-  const res = await botss.find()
-  if (!res.length) {
-    console.log(res)
-    console.log(":::> Creating new BOT");
-    const bot = new botss({
-      last: '0.0021',
-      _string: "5.2",
-      last_point: '277',
-      rate: '1',
-      period: Date.now(),
-      count: "0",
-      in_swap: false
-    })
-    const save = await bot.save();
-    if (save) {
-      console.table(save);
-    }
-    return {
-      bool: false,
-      msg: "Something went wrong"
-    }
-  } else {
-    last = res[0].last;
-    last_point = res[0].last_point;
-    _string = res[0]._string;
-    id = res[0]._id;
-    period = formatTimestamp(res[0].period);
-    count = res[0].count;
-    in_swap = res[0].in_swap;
-    time = formatTimestamp(res[0].date);
-    gas = res[0].gas;
-    startPrice = res[0].startPrice;
-    percentage_change_in_price = res[0].percentage_change_in_price;
-    old_threshold = res[0].old_threshold;
-    new_threshold = res[0].new_threshold;
-    let console_data = {
-      last, last_point, _string,
-      startPrice,
-      id, period, count, time, gas,
-      old_threshold,
-      percentage_change_in_price,
-      new_threshold
-    }
-    console.table(console_data);
-    return {
-      bool: true,
-      data: console_data,
-      msg: "Data found"
-    }
-  };
-}
+
 
 //Get current price of WBNB and USDT...
 async function getPrice(coin, fiated) {
@@ -523,10 +588,17 @@ async function getPrice(coin, fiated) {
 //Update database with new values...
 async function update(amounts, rate, period) {
   try {
+
     gas = Number(gas) + 1;
     count = Number(count) + 1;
+    gasOverAll = [...gasOverAll,gas];
+    dates = [...dates,Date.now()];
+    gasVolume = Number(gasVolume) + Number(gas);
+    gain = [...gain, Number(amounts)]; // Gain not calculated yet...
+    gainCount = gain.length;
     gas = gas.toString();
     count = count.toString();
+
     const done = await botss.updateOne({ last },
       {
         $set: {
@@ -537,14 +609,20 @@ async function update(amounts, rate, period) {
           count,
           gas,
           new_threshold:threshold,
-          old_threshold:new_threshold
+          old_threshold:new_threshold,
+          percentage_change_in_price,
+          gasOverAll,
+          gasVolume,
+          dates,
+          gain,
+          gainCount        
         }
-      });
+    });
 
     if (done) {
-      console.log(done);
-      console.log("A trade was made: updated");
-      console.log("swaped")
+      console.log({done});
+      console.log(":::> A trade was made: updated");
+      console.log("<::: SWAPED :::>")
     }
     console.log('updated')
   } catch (err) {
@@ -553,26 +631,41 @@ async function update(amounts, rate, period) {
 }
 
 //Run bot simulation...
-console.log('[INFO] RUNNING. Press ctrl+C to exit.')
+console.log('[TRADING] RUNNING. Press ctrl+C to exit.')
 let toBuyValue = config.startAmount; //(Need update)...
 let toSellValue = 0; //(Need update)...
 
+let allow, balance, balance_two;
 
+async function SellRequiredUSDT(){
+  //If break point is approved...
+  //Check if threshold is greater now...
+  //return amount to trade - gasFees
+}
 
+async function SellAll({coin,value}){
+  if(value == true) config.startCoin = coin;
+  console.log({STARTCOIN:config.startCoin});
+}
 
-//Run bot simulation Check...
-async function check() {
+async function PreCheck(){
+  console.log({["USE ADDRESS (HEX) :::>"]:wallet.address});
   console.table({startAmount:config.startAmount});
-let balance = await checkBalance();
-let balance_two = await checkBalanceTwo();
-console.table({WBNB:balance,USDT:balance_two});
-await GetData();
-await getPrice("binancecoin,tether", "usd");
+  balance = await checkBalance();
+  balance_two = await checkBalanceTwo();
+  console.table({WBNB:balance,USDT:balance_two});
+  await GetData();
+  await getPrice("binancecoin,tether", "usd");
+  
+    threshold = await getBNBPriceChangePerDay();
+    allow = await Allow(balance);
+    console.table({allow});
+}
 
-  threshold = await getBNBPriceChangePerDay();
-  const allow = await Allow(balance);
-  console.table({allow});
-  if (allow) {
+//RUN BOT simulation Check...
+async function check() {
+    await PreCheck();
+  if(allow) {
     /**
      * (recentBalance - previousBalance) >= Threshold
      * In if statement...
@@ -587,7 +680,9 @@ await getPrice("binancecoin,tether", "usd");
      * 
      * 
      */
-    if ((Number(last_price.binancecoin.usd) - Number(last_point)) >= Number(threshold) ){//Number(_string)) {
+    if ((Number(last_price.binancecoin.usd) - Number(last_point)) >= Number(threshold) ){
+      //Number(_string)) {
+      console.log('BLOCK UNCHANGED # :::>');
       let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
       let amounts_two = Number(last_point) * Number(balance);
       console.table({ AmoutnOne:amounts_one, AmoutnTwo:amounts_two, Amounts:(amounts_one-amounts_two)});
@@ -620,20 +715,23 @@ await getPrice("binancecoin,tether", "usd");
 
     } else {
 
-
       let less = Number(last_price.binancecoin.usd) - Number(last_point)
       less = less;
       period = Date.now() - time;
+      const negativeThreshold = ((Number(threshold))-(Number(threshold)*2));
+      console.log("negativeThreshold =>",negativeThreshold);
+        console.log({LessCal:less-negativeThreshold});
 
-      if (less <= 0) {
+      if (less <= 0 && less < negativeThreshold) {
         console.log('<::: # BLOCK CHANGED #');
         let call = Number(last_price.tether.usd) * Number(balance_two);
         let amounts_one = Number(last_price.binancecoin.usd) * Number(balance);
         let amounts_two = Number(last_point) * Number(balance);
-        console.table({ amounts_one, amounts_two });
+        console.table({ BNB_TO_DOLLAR:amounts_one, PREV_BNB_TO_DOLLAR:amounts_two });
         let amounts = amounts_two - amounts_one;
+        console.log("Differnce =>",amounts);
         amounts = amounts.toString();
-        toSellValue = Number(amounts)///last_price.tether.usd;
+        toSellValue = Number(amounts); //last_price.tether.usd;
         toSellValue = toSellValue.toFixed(6);
         toSellValue = toSellValue.toString();
         toBuyValue = 0;
@@ -665,7 +763,7 @@ await getPrice("binancecoin,tether", "usd");
         //  }else{
         //   console.log('skipped',toSellValue)
         //  }
-      } else {
+      }else{
         console.log('::> Still under Threshold', Number(last_price.binancecoin.usd) - Number(last_point))
         await waitToTrade(config.tradeInterval);
         await check();
@@ -674,7 +772,7 @@ await getPrice("binancecoin,tether", "usd");
   } 
   else {
     if (balance < 0.02) {
-      console.log("Balance is less than 0.02");
+      console.log(":::> Balance is <=", 0.02);
       await waitToTrade(19);
       await check()
     } 
@@ -693,4 +791,4 @@ await getPrice("binancecoin,tether", "usd");
 }
 
 await check();
-console.log('[INFO] Done.');
+console.log('<::: [TRADING] DONE :::>');
