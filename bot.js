@@ -245,19 +245,6 @@ async function GetData() {
   };
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 const config = {
   startCoin: process.env.START_COIN,
   startAmount: process.env.START_AMOUNT,
@@ -556,7 +543,7 @@ async function Allow(balance) {
   // 0.10bnb == NGN15k
   if (Number(balance) <= 0.060) {
     //0.095 => NGN25000
-    return false
+    return false;
   } else {
     return true;
   }
@@ -687,7 +674,7 @@ async function check() {
       let amounts_two = Number(last_point) * Number(balance);
       console.table({ AmoutnOne:amounts_one, AmoutnTwo:amounts_two, Amounts:(amounts_one-amounts_two)});
       let amounts = amounts_one - amounts_two;
-      toBuyValue = Number(balance) // Number(amounts) / Number(last_price.binancecoin.usd);
+      toBuyValue = Number(balance); // Number(amounts) / Number(last_price.binancecoin.usd);
       let controlUnit = Number(0.20) / Number(last_price.binancecoin.usd);
       if (toBuyValue >= controlUnit) {
         // in bnb :)
